@@ -1,0 +1,83 @@
+Renesas Optimizing Linker (W1.01.00 )             28-Feb-2014 19:05:24
+
+*** Options ***
+
+-subcommand=DefaultBuild\IIC27.clnk
+-library=DefaultBuild\IIC27.lib
+-input=DefaultBuild\dbsct.obj
+-input=DefaultBuild\IIC27.obj
+-input=DefaultBuild\resetprg.obj
+-input=DefaultBuild\sbrk.obj
+-input=DefaultBuild\R_PG_Clock.obj
+-input=DefaultBuild\R_PG_I2C_C1.obj
+-input=DefaultBuild\Interrupt_INTC.obj
+-library=C:\Renesas\PDG2\lib\RX62N\RX62N_library_LQFP_144.lib
+-noprelink
+-output=DefaultBuild\IIC27.abs
+-list=DefaultBuild\IIC27.map
+-nooptimize
+-start=B_1,R_1,B_2,R_2,B,R,SU,SI/04,PResetPRG/0FFFF8000,C_1,C_2,C,C$DSEC,C$BSEC,C$INIT,C$VTBL,C$VECT,D_1,D_2,D,P,PIntPRG,W_1,W_2,W,L/0FFFF8100,FIXEDVECT/0FFFFFFD0
+-rom=D=R,D_1=R_1,D_2=R_2
+-nologo
+-end
+
+*** Error information ***
+
+W0561100:Cannot find "PIntPRG" specified in option "start"
+
+*** Mapping List ***
+
+SECTION                            START      END         SIZE   ALIGN
+
+B_1
+                                  00000004  000001a9       1a6   1
+R_1
+                                  000001aa  0000022c        83   1
+B_2
+                                  0000022e  0000023d        10   2
+R_2
+                                  0000023e  0000023e         0   1
+B
+                                  00000240  00000683       444   4
+R
+                                  00000684  0000093f       2bc   4
+SU
+                                  00000940  00000a3f       100   4
+SI
+                                  00000a40  00000d3f       300   4
+PResetPRG
+                                  ffff8000  ffff8030        31   1
+C_1
+                                  ffff8100  ffff81e1        e2   1
+C_2
+                                  ffff81e2  ffff83e3       202   2
+C
+                                  ffff83e4  ffff853b       158   4
+C$DSEC
+                                  ffff853c  ffff855f        24   4
+C$BSEC
+                                  ffff8560  ffff8577        18   4
+C$INIT
+                                  ffff8578  ffff8578         0   1
+C$VTBL
+                                  ffff8578  ffff8578         0   1
+C$VECT
+                                  ffff8578  ffff8977       400   4
+D_1
+                                  ffff8978  ffff89fa        83   1
+D_2
+                                  ffff89fb  ffff89fb         0   1
+D
+                                  ffff89fc  ffff8cb7       2bc   4
+P
+                                  ffff8cb8  ffffc576      38bf   1
+W_1
+                                  ffffc577  ffffc577         0   1
+W_2
+                                  ffffc578  ffffc58b        14   2
+W
+                                  ffffc58c  ffffc58c         0   4
+L
+                                  ffffc58c  ffffc5dc        51   4
+FIXEDVECT
+                                  ffffffd0  ffffffff        30   4
