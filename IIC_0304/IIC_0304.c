@@ -36,21 +36,106 @@ void abort(void);
 
 //通信
 #define MODE_SCIDATA_BOX 		8
-#define BITRATE	115200
-#define SLAVE_ADDRESS		0x62
+#define BITRATE_SCI_1   	 9600
+#define SLAVE_ADDRESS_W			0xA4
+#define SLAVE_ADDRESS_R			0xA5
+#define SEND_ADDRESS1				0x00
+#define SEND_ADDRESS2				0x40
 
-	#if MODE_SCIDATA_BOX != OFF
+
+	/*#if MODE_SCIDATA_BOX != OFF
 char 	sc1[50],sc2[50],sc3[50],sc4[50],sc5[50],sc6[50],
 	sc7[50],sc8[50];
 float	g_sci1 = 0.0,g_sci2 = 0.0,g_sci3 = 0.0,g_sci4 = 0.0,
 	g_sci5 = 0.0,g_sci6 = 0.0,g_sci7 = 0.0,g_sci8 = 0.0;
 	#endif	
+*/
+char 	iic_R_data[20] = {0};
+char 	iic_S_data[3] = {SEND_ADDRESS1,SEND_ADDRESS2};
 
-unsigned char iic_R_data[30] = {0};
-unsigned char iic_S_data = 0;
+void Init_Sci(void)
+{
+	int a = 0;
+	
+	MSTP(SCI1) = 0;	//モジュールストップ解除 簡略版
+	//iodefineの最初の部分に記載されている
+	
+	//SCR.TIE, RIE, TE, RE, TEIEビットを“0”にする
+	SCI1.SCR.BIT.TIE = 0;
+	SCI1.SCR.BIT.RIE = 0;
+	SCI1.SCR.BIT.TE = 0;
+	SCI1.SCR.BIT.RE = 0;
+	SCI1.SCR.BIT.TEIE = 0;
+	
+	//PORTi.ICR.Bjビットを“1”にする
+	PORT3.DDR.BIT.B0 = 0;
+	PORT3.ICR.BIT.B0 = 1;
+	
+	//SCR.CKE[1:0]ビットを設定
+	SCI1.SCR.BIT.CKE = 0;
+	
+	//SMR、SCMRに送信／受信フォーマットを設定
+	SCI1.SMR.BIT.CKS = 1;
+	SCI1.SCMR.BIT.SMIF = 0;
+	
+	//BRRに値を書く
+	SCI1.BRR = 19;
+	
+	//1ビット待つ
+	for(a = 0; a < 10000 ; a++){
+	}
+	
+	//SCR.TE,REビットを“1”におよびSCR.TIE,RIETEIEビットを設定
+	SCI1.SCR.BIT.TE = 1;
+	SCI1.SCR.BIT.RE = 1;
+	SCI1.SCR.BIT.TIE = 1;
+	SCI1.SCR.BIT.RIE = 1;
+	SCI1.SCR.BIT.TEIE = 1;
+}
 
 
+/******************************************************************************
+*	タイトル ： クロック同期式モード 1文字送信
+*	  関数名 ： transmit_c_Serial_clock
+*	  戻り値 ： void型 
+*	   引数1 ： long型 data  
+*	  作成者 ： 真下康宏
+*	  作成日 ： 2012/09/12
+******************************************************************************/
+void transmit_c_Serial_clock(long data)
+{
+	//送信データエンプティフラグが1になるまで待つ
+	while(SCI1.SSR.BIT.TDRE != 1){
+	}
+	
+	SCI1.TDR = data;
+	
+	SCI1.SCR.BIT.TIE = 0;
+	
+	//SSR.TENDフラグを読み出し
+	while(SCI1.SSR.BIT.TEND != 1){
+	}
+	
+}
 
+/******************************************************************************
+*	タイトル ： クロック同期式モード 文字列送信
+*	  関数名 ： transmit_s_Serial_clock
+*	  戻り値 ： void型 
+*	   引数1 ： char型 s[]  
+*	  作成者 ： 真下康宏
+*	  作成日 ： 2012/09/12
+******************************************************************************/
+void transmit_s_Serial_clock(char s[])
+{
+	int x = 0;
+	
+	while(s[x]!='\0'){
+		transmit_c_Serial_clock(s[x]);
+		x++;
+	}
+	transmit_c_Serial_clock('\0');
+}
 
 void Init_Led(void)
 {
@@ -58,119 +143,6 @@ void Init_Led(void)
 	PORT8.DDR.BIT.B1 = 1;
 	PORT1.DDR.BIT.B5 = 1;
 }
-
-
-/******************************************************************************
-*	タイトル ： sci通信初期化
-*	  関数名 ： init_Sci
-*	  戻り値 ： void型 
-*	    引数 ： なし
-******************************************************************************/
-void Init_Sci(void)	//SCI1版
-{
-	int bit_count = 0;
-	
-
-	SYSTEM.MSTPCRB.BIT.MSTPB30 = 0;	//SCI1モジュールSTOP状態を解除
-	SCI1.SCR.BYTE		= 0x00;		//シリアルコントロールレジスタ
-										//河原 0x01→0x00 で通信速度を最大に．分周1
-	PORT3.DDR.BIT.B0	= 0;		//
-	PORT3.ICR.BIT.B0	= 1;		//
-	SCI1.SMR.BYTE		= 0x01;		//シリアルモードレジスタ
-	//SCI1.BRR			= 77;		//ビットレートレジスタ77  9600bpsなら0x01の77
-									//河原77→12 通信速度を230400bpsに設定
-	SCI1.SEMR.BIT.ABCS	= 1;		//調歩同期基本クロックを８サイクルの期間を１ビット期間の転送レートとする
-	
-	SCI1.BRR = 77;//((48*1000000)/((64/(1+SCI1.SEMR.BIT.ABCS))*powf(2,2*SCI1.SMR.BIT.CKS-1)*BITRATE)-1);
-	for( bit_count = 0; bit_count < 0x800000; bit_count++ ){	//１ビット待つため
-	}
-	SCI1.SCR.BYTE		= 0x30;		//送受信動作を許可
-	//#endif
-}
-
-/******************************************************************************
-*	タイトル ： 文字送信
-*	  関数名 ： Transmit_uart_c
-*	  戻り値 ： void型 
-*	   引数1 ： char型 character  
-******************************************************************************/
-void Transmit_uart_c(char character)
-{
-	while(SCI1.SSR.BIT.TDRE == 0);//箱TDRの中にデータが残っていればフラグ=1  出てくまで待つ
-	SCI1.TDR=character;//データを書き込み（ライト）
-	SCI1.SSR.BIT.TDRE = 0;
-	while( SCI1.SSR.BIT.TEND == 0 );
-}
-/******************************************************************************
-*	タイトル ： 文字列を文字送信関数へ送る
-*	  関数名 ： String
-*	  戻り値 ： void型 
-*	   引数1 ： char型 s[]  
-******************************************************************************/
-void String (char s[])
-{
-	int i=0;
-	while(s[i] != '\0')
-	{
-		Transmit_uart_c(s[i]);		
-		i++;
-	}
-}
-
-/******************************************************************************
-*	タイトル ： Excel処理のためのデータをシリアル送信
-*	  関数名 ： sci_transformer
-*	  戻り値 ： void型 
-*	    引数 ： なし
-*	  作成者 ： 眞下康宏
-*	  作成日 ： 2013/02/25
-******************************************************************************/
-void sci_transformer(void)
-{	
-	#if MODE_SCIDATA_BOX >= 1
-		sprintf(sc1,"%f",(float)g_sci1);
-		String(",");
-		String(sc1);
-	#endif
-	#if MODE_SCIDATA_BOX >= 2
-		sprintf(sc2,"%f",(float)g_sci2);
-		String(",");
-		String(sc2);
-	#endif
-	#if MODE_SCIDATA_BOX >= 3
-		sprintf(sc3,"%f",(float)g_sci3);
-		String(",");
-		String(sc3);
-	#endif
-	#if MODE_SCIDATA_BOX >= 4
-		sprintf(sc4,"%f",(float)g_sci4);
-		String(",");
-		String(sc4);
-	#endif
-	#if MODE_SCIDATA_BOX >= 5
-		sprintf(sc5,"%f",(float)g_sci5);
-		String(",");
-		String(sc5);
-	#endif
-	#if MODE_SCIDATA_BOX >= 6
-		sprintf(sc6,"%5d",(long)g_sci6);
-		String(",");
-		String(sc6);		
-	#endif
-	#if MODE_SCIDATA_BOX >= 7
-		sprintf(sc7,"%5d",(long)g_sci7);
-		String(",");
-		String(sc7);
-	#endif
-	#if MODE_SCIDATA_BOX >= 8
-		sprintf(sc8,"%5d",(long)g_sci8);
-		String(",");
-		String(sc8);
-	#endif
-	
-	String("\n\r");
-}
-
 
 void main(void)
 {
@@ -186,32 +158,38 @@ void main(void)
 	while(1){
 		LED_0(ON);
 		
-		if(send_f == 0){
-			iic_S_data = 0;
-			send_f = 1;
+		if((send_f == 0)||(send_f == 1)){
+			send_f ++;
+			R_PG_I2C_MasterSend_C1(
+			0,//スレーブアドレスフォーマット
+			SLAVE_ADDRESS_W,//スレーブアドレス
+			&iic_S_data[send_f], //送信データの格納先アドレス
+			2//送信データ数
+			);
 		}
-		R_PG_I2C_MasterSend_C1(
-		0,//スレーブアドレスフォーマット
-		0x31,//スレーブアドレス
-		&iic_S_data, //送信データの格納先アドレス
-		2//送信データ数
-		);
 		
 		R_PG_I2C_MasterReceive_C1(
-		0,//スレーブアドレスフォーマット
-		0x31,//スレーブアドレス
-		&iic_R_data[i], //受信データの格納先アドレス
-		30 //受信データ数
+		0,			//スレーブアドレスフォーマット
+		SLAVE_ADDRESS_R,		//スレーブアドレス
+		&iic_R_data[i],	//受信データの格納先アドレス
+		30 			//受信データ数
 		);
+		
 		LED_1(ON);
 		
 		//sprintf(moji,"  %d\n\r",(int)iic_R_data[i]);
-		Transmit_uart_c(iic_R_data[i]);
+		//Transmit_uart_c(iic_R_data[i]);
+
+		 transmit_s_Serial_clock(iic_R_data[i]);
+
 
 		LED_2(ON);
 		i++;
-		if(i == 21)i = 0;
-	}
+		if(i == 20){
+			i = 0;
+		}
+			
+		}
 }
 
 #ifdef __cplusplus
