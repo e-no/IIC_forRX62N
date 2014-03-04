@@ -1,4 +1,4 @@
-Renesas Optimizing Linker (W1.01.00 )             28-Feb-2014 19:05:24
+Renesas Optimizing Linker (W1.01.00 )             04-Mar-2014 13:54:47
 
 *** Options ***
 
@@ -70,14 +70,14 @@ D_2
 D
                                   ffff89fc  ffff8cb7       2bc   4
 P
-                                  ffff8cb8  ffffc576      38bf   1
+                                  ffff8cb8  ffffc57a      38c3   1
 W_1
-                                  ffffc577  ffffc577         0   1
+                                  ffffc57b  ffffc57b         0   1
 W_2
-                                  ffffc578  ffffc58b        14   2
+                                  ffffc57c  ffffc58f        14   2
 W
-                                  ffffc58c  ffffc58c         0   4
+                                  ffffc590  ffffc590         0   4
 L
-                                  ffffc58c  ffffc5dc        51   4
+                                  ffffc590  ffffc5e0        51   4
 FIXEDVECT
                                   ffffffd0  ffffffff        30   4

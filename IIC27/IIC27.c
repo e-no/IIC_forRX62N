@@ -38,7 +38,7 @@ void abort(void);
 //通信関連
 #define MODE_SCIDATA_BOX 		8
 #define BITRATE	115200
-#define SLAVE_ADDRESS		0xA4
+#define SLAVE_ADDRESS		0x31
 
 	#if MODE_SCIDATA_BOX != OFF
 char 	sc1[50],sc2[50],sc3[50],sc4[50],sc5[50],sc6[50],
@@ -190,16 +190,15 @@ void main(void)
 	while(1){
 	
 		R_PG_I2C_MasterReceive_C1(
-		SLAVE_ADDRESS, //スレーブアドレスフォーマット
-		 //スレーブアドレス
+		//スレーブアドレスフォーマット
+		SLAVE_ADDRESS,//スレーブアドレス
 		&iic_data, //受信データの格納先アドレス
 		50 //受信データ数
 		);
 		LED_1(ON);
 		
-		sprintf(moji,"  %d\n\r",iic_data);
+		sprintf(moji,"  %d\n\r",(int)iic_data);
 		Transmit_uart_c(moji);
-		
 		
 		LED_2(ON);
 		i++;

@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<MicomToolCommonProjectFile Version="1.00">
+  <CreatorType Name="CubeSuite+" Version="V2.01.00  [09 Sep 2013]" />
+  <Placeholders>
+    <PlaceholderPrefix>%</PlaceholderPrefix>
+    <PlaceholderPostfix>%</PlaceholderPostfix>
+  </Placeholders>
+  <Project Name="PDG2_IIC_34" Type="Application">
+    <Files>
+      <Path>dbsct.c</Path>
+      <Path>PDG2_IIC_34.c</Path>
+      <Path>resetprg.c</Path>
+      <Path>sbrk.c</Path>
+      <Path>iodefine.h</Path>
+      <Path>sbrk.h</Path>
+      <Path>stacksct.h</Path>
+      <Path>typedefine.h</Path>
+      <Path>vect.h</Path>
+      <Category Name="AddFromPDG">
+        <Category Name="SYSTEM">
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\SYSTEM\R_PG_Clock.c</Path>
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\SYSTEM\R_PG_Clock.h</Path>
+        </Category>
+        <Category Name="RIIC">
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\RIIC\R_PG_I2C_C1.c</Path>
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\RIIC\R_PG_I2C_C1.h</Path>
+        </Category>
+        <Category Name="i_src">
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\i_src\r_pdl_user_definitions.h</Path>
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\i_src\Interrupt_INTC.c</Path>
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\i_src\iodefine_RPDL.h</Path>
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\i_src\r_pdl_common_defs_RX62Nxx.h</Path>
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\i_src\r_pdl_definitions.h</Path>
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\i_src\r_pdl_intc.h</Path>
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\i_src\r_pdl_intc_RX62Nxx.h</Path>
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\i_src\r_pdl_cgc.h</Path>
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\i_src\r_pdl_cgc_RX62Nxx.h</Path>
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\i_src\r_pdl_iic.h</Path>
+          <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\i_src\r_pdl_iic_RX62NxnFP.h</Path>
+        </Category>
+        <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\R_PG_PDG2.h</Path>
+        <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\R_PG_IntFuncsExtern.h</Path>
+        <Path>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\R_PG_RPDL_headers.h</Path>
+      </Category>
+    </Files>
+    <Device Series="RX">R5F562N7BxFB</Device>
+    <BuildOptions Name="CC-RX" Version="V2.01.00">
+      <BuildMode Name="DefaultBuild" Active="True">
+        <GeneralOptions>
+          <SimultaneouslyBuild>true</SimultaneouslyBuild>
+        </GeneralOptions>
+        <CompileOptions>
+          <Option>-isa=rxv1</Option>
+          <Option>-lang=c</Option>
+          <Option>-include=..\..\..\..\..\..\renesas\PDG2_proj\PDG2</Option>
+          <Option>-include=..\..\..\..\..\..\renesas\PDG2_proj\PDG2\i_src</Option>
+          <Option>-include=..\..\..\..\..\..\renesas\PDG2_proj\PDG2\RIIC</Option>
+          <Option>-include=..\..\..\..\..\..\renesas\PDG2_proj\PDG2\SYSTEM</Option>
+          <Option>-output=obj=%BuildModeName%\%FileLeaf%.obj</Option>
+          <Option>-debug</Option>
+          <Option>-fpu</Option>
+          <Option>-nologo</Option>
+        </CompileOptions>
+        <AssembleOptions>
+          <Option>-isa=rxv1</Option>
+          <Option>-output=%BuildModeName%\%FileLeaf%.obj</Option>
+          <Option>-nologo</Option>
+        </AssembleOptions>
+        <LinkOptions>
+          <Option>-library=C:\Renesas\PDG2\lib\RX62N\RX62N_library_144_little.lib</Option>
+          <Option>-output=%BuildModeName%\%ProjectName%.abs</Option>
+          <Option>-list=%BuildModeName%\%ProjectName%.map</Option>
+          <Option>-nooptimize</Option>
+          <Option>-start=B_1,R_1,B_2,R_2,B,R,SU,SI/04,PResetPRG/0FFFF8000,C_1,C_2,C,C$DSEC,C$BSEC,C$INIT,C$VTBL,C$VECT,D_1,D_2,D,P,PIntPRG,W_1,W_2,W,L/0FFFF8100,FIXEDVECT/0FFFFFFD0</Option>
+          <Option>-rom=D=R,D_1=R_1,D_2=R_2</Option>
+          <Option>-nologo</Option>
+          <Option>-end</Option>
+          <Option>-input=%BuildModeName%\%ProjectName%.abs</Option>
+          <Option>-output=%BuildModeName%\%ProjectName%.mot</Option>
+          <Option>-form=stype</Option>
+          <Option>-exit</Option>
+          <PreLinker>Auto</PreLinker>
+        </LinkOptions>
+        <LibraryGenerateOptions>
+          <Option>-isa=rxv1</Option>
+          <Option>-head=runtime,math,stdio,stdlib,string,new</Option>
+          <Option>-output=%BuildModeName%\%ProjectName%.lib</Option>
+          <Option>-fpu</Option>
+          <Option>-nologo</Option>
+          <GenerateMode>BuildOptionChanged</GenerateMode>
+        </LibraryGenerateOptions>
+        <LinkOrder>
+          <Path>DefaultBuild\dbsct.obj</Path>
+          <Path>DefaultBuild\PDG2_IIC_34.obj</Path>
+          <Path>DefaultBuild\resetprg.obj</Path>
+          <Path>DefaultBuild\sbrk.obj</Path>
+          <Path>DefaultBuild\R_PG_Clock.obj</Path>
+          <Path>DefaultBuild\R_PG_I2C_C1.obj</Path>
+          <Path>DefaultBuild\Interrupt_INTC.obj</Path>
+        </LinkOrder>
+        <CommonOptions>
+          <IncludePathForC>..\..\..\..\..\..\renesas\PDG2_proj\PDG2</IncludePathForC>
+          <IncludePathForC>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\i_src</IncludePathForC>
+          <IncludePathForC>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\RIIC</IncludePathForC>
+          <IncludePathForC>..\..\..\..\..\..\renesas\PDG2_proj\PDG2\SYSTEM</IncludePathForC>
+        </CommonOptions>
+      </BuildMode>
+    </BuildOptions>
+  </Project>
+</MicomToolCommonProjectFile>
