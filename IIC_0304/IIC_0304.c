@@ -147,8 +147,11 @@ void Init_Led(void)
 void main(void)
 {
 	int i = 0;
+	unsigned char cmd_send1[] = {0x40,0x00};
+	unsigned char cmd_send2[] = {0x00};
 	int send_f = 0;
-	unsigned char moji = 0;
+	int f = 0;
+	unsigned char format = 0;
 		
 	Init_Led();
 	R_PG_Clock_Set();
@@ -157,32 +160,38 @@ void main(void)
 
 	while(1){
 		LED_0(ON);
+
+	
 		
-		if((send_f == 0)||(send_f == 1)){
-			send_f ++;
 			R_PG_I2C_MasterSend_C1(
-			0,//スレーブアドレスフォーマット
+			format,//スレーブアドレスフォーマット
 			SLAVE_ADDRESS_W,//スレーブアドレス
-			&iic_S_data[send_f], //送信データの格納先アドレス
+			&cmd_send1[0], //送信データの格納先アドレス
 			2//送信データ数
 			);
-		}
+			send_f++;
 		
-		R_PG_I2C_MasterReceive_C1(
-		0,			//スレーブアドレスフォーマット
-		SLAVE_ADDRESS_R,		//スレーブアドレス
-		&iic_R_data[i],	//受信データの格納先アドレス
-		30 			//受信データ数
-		);
+			R_PG_I2C_MasterSend_C1(
+			format,//スレーブアドレスフォーマット
+			SLAVE_ADDRESS_W,//スレーブアドレス
+			&cmd_send2[0], //送信データの格納先アドレス
+			1//送信データ数
+			);
+			send_f++;
+
+			
+			R_PG_I2C_MasterReceive_C1(
+			format,			//スレーブアドレスフォーマット
+			SLAVE_ADDRESS_R,		//スレーブアドレス
+			&iic_R_data[i],	//受信データの格納先アドレス
+			10 			//受信データ数
+			);
 		
+			
 		LED_1(ON);
-		
-		//sprintf(moji,"  %d\n\r",(int)iic_R_data[i]);
-		//Transmit_uart_c(iic_R_data[i]);
 
 		 transmit_s_Serial_clock(iic_R_data[i]);
-
-
+		 
 		LED_2(ON);
 		i++;
 		if(i == 20){

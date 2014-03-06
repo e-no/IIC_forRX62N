@@ -255,10 +255,10 @@
     <Instance Guid="1e90e59c-ed41-4919-a4b8-be824f0085a9">
       <MemoCount>0</MemoCount>
     </Instance>
-    <Instance Guid="afcc1c9c-7733-408c-b1c0-c1922c93a4bd">
+    <Instance Guid="3b9c04c1-2cd2-47c6-b590-6f34027e472c">
       <MemoCount>0</MemoCount>
     </Instance>
-    <Instance Guid="3b9c04c1-2cd2-47c6-b590-6f34027e472c">
+    <Instance Guid="afcc1c9c-7733-408c-b1c0-c1922c93a4bd">
       <MemoCount>0</MemoCount>
     </Instance>
     <Instance Guid="532beefa-75e1-4b95-99b2-f4f83931b193">
@@ -282,6 +282,12 @@
     <Instance Guid="2a81c37a-5015-44c2-9f40-e58b669eec75">
       <DeviceName>R5F562N7BxFB</DeviceName>
       <MemoCount>0</MemoCount>
+    </Instance>
+  </Class>
+  <Class Guid="873c9a58-9bc5-439a-b476-78629a4553ed">
+    <Instance Guid="873c9a58-9bc5-439a-b476-78629a4553ed">
+      <ProjectDeviceChangedCounter>0</ProjectDeviceChangedCounter>
+      <ProjectInitialDeviceName>R5F562N7BxFB</ProjectInitialDeviceName>
     </Instance>
   </Class>
   <Class Guid="c3835e31-dea3-4c93-b02b-d2db997f7630">
@@ -1483,6 +1489,11 @@ D_2=R_2
       <DebuggerProperty-HookProperty-HookTransaction-Broke-Length>0</DebuggerProperty-HookProperty-HookTransaction-Broke-Length>
       <DebuggerProperty-HookProperty-HookTransaction-Connected-Length>0</DebuggerProperty-HookProperty-HookTransaction-Connected-Length>
       <DebuggerProperty-HookProperty-HookTransaction-Disconnecting-Length>0</DebuggerProperty-HookProperty-HookTransaction-Disconnecting-Length>
+    </Instance>
+  </Class>
+  <Class Guid="2a2c2a43-ecdb-4e88-80bd-e75f3e33db90">
+    <Instance Guid="2a2c2a43-ecdb-4e88-80bd-e75f3e33db90">
+      <ProductVersion>4.01.00.00</ProductVersion>
     </Instance>
   </Class>
 </CubeSuiteProject>
