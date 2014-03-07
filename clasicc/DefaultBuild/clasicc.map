@@ -1,0 +1,83 @@
+Renesas Optimizing Linker (W1.01.00 )             07-Mar-2014 19:37:18
+
+*** Options ***
+
+-subcommand=DefaultBuild\clasicc.clnk
+-library=DefaultBuild\clasicc.lib
+-input=DefaultBuild\clasicc.obj
+-input=DefaultBuild\dbsct.obj
+-input=DefaultBuild\resetprg.obj
+-input=DefaultBuild\sbrk.obj
+-input=DefaultBuild\R_PG_Clock.obj
+-input=DefaultBuild\R_PG_I2C_C1.obj
+-input=DefaultBuild\Interrupt_INTC.obj
+-library=C:\Renesas\PDG2\lib\RX62N\RX62N_library_144_little.lib
+-noprelink
+-output=DefaultBuild\clasicc.abs
+-list=DefaultBuild\clasicc.map
+-nooptimize
+-start=B_1,R_1,B_2,R_2,B,R,SU,SI/04,PResetPRG/0FFFF8000,C_1,C_2,C,C$DSEC,C$BSEC,C$INIT,C$VTBL,C$VECT,D_1,D_2,D,P,PIntPRG,W_1,W_2,W,L/0FFFF8100,FIXEDVECT/0FFFFFFD0
+-rom=D=R,D_1=R_1,D_2=R_2
+-nologo
+-end
+
+*** Error information ***
+
+W0561100:Cannot find "PIntPRG" specified in option "start"
+
+*** Mapping List ***
+
+SECTION                            START      END         SIZE   ALIGN
+
+B_1
+                                  00000004  00000403       400   1
+R_1
+                                  00000404  00000454        51   1
+B_2
+                                  00000456  00000465        10   2
+R_2
+                                  00000466  00000466         0   1
+B
+                                  00000468  000008ab       444   4
+R
+                                  000008ac  00000b9b       2f0   4
+SU
+                                  00000b9c  00000c9b       100   4
+SI
+                                  00000c9c  00000f9b       300   4
+PResetPRG
+                                  ffff8000  ffff8030        31   1
+C_1
+                                  ffff8100  ffff81e1        e2   1
+C_2
+                                  ffff81e2  ffff83e3       202   2
+C
+                                  ffff83e4  ffff853b       158   4
+C$DSEC
+                                  ffff853c  ffff855f        24   4
+C$BSEC
+                                  ffff8560  ffff8577        18   4
+C$INIT
+                                  ffff8578  ffff8578         0   1
+C$VTBL
+                                  ffff8578  ffff8578         0   1
+C$VECT
+                                  ffff8578  ffff8977       400   4
+D_1
+                                  ffff8978  ffff89c8        51   1
+D_2
+                                  ffff89c9  ffff89c9         0   1
+D
+                                  ffff89cc  ffff8cbb       2f0   4
+P
+                                  ffff8cbc  ffffcdd1      4116   1
+W_1
+                                  ffffcdd2  ffffcdd2         0   1
+W_2
+                                  ffffcdd2  ffffcde5        14   2
+W
+                                  ffffcde8  ffffcde8         0   4
+L
+                                  ffffcde8  ffffce34        4d   4
+FIXEDVECT
+                                  ffffffd0  ffffffff        30   4

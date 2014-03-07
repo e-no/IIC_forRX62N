@@ -5,10 +5,10 @@
     <PlaceholderPrefix>%</PlaceholderPrefix>
     <PlaceholderPostfix>%</PlaceholderPostfix>
   </Placeholders>
-  <Project Name="IIC_0306_1550" Type="Application">
+  <Project Name="clasicc" Type="Application">
     <Files>
+      <Path>clasicc.c</Path>
       <Path>dbsct.c</Path>
-      <Path>IIC_0306_1550.c</Path>
       <Path>resetprg.c</Path>
       <Path>sbrk.c</Path>
       <Path>iodefine.h</Path>
@@ -37,16 +37,10 @@
           <Path>PDG2\i_src\r_pdl_cgc_RX62Nxx.h</Path>
           <Path>PDG2\i_src\r_pdl_iic.h</Path>
           <Path>PDG2\i_src\r_pdl_iic_RX62NxnFP.h</Path>
-          <Path>PDG2\i_src\r_pdl_sci.h</Path>
-          <Path>PDG2\i_src\r_pdl_sci_RX62Nxx.h</Path>
         </Category>
         <Path>PDG2\R_PG_PDG2.h</Path>
         <Path>PDG2\R_PG_IntFuncsExtern.h</Path>
         <Path>PDG2\R_PG_RPDL_headers.h</Path>
-        <Category Name="SCI">
-          <Path>PDG2\SCI\R_PG_SCI_C1.c</Path>
-          <Path>PDG2\SCI\R_PG_SCI_C1.h</Path>
-        </Category>
       </Category>
     </Files>
     <Device Series="RX">R5F562N7BxFB</Device>
@@ -58,7 +52,6 @@
         <CompileOptions>
           <Option>-isa=rxv1</Option>
           <Option>-lang=c</Option>
-          <Option>-include=PDG2\SCI</Option>
           <Option>-include=PDG2</Option>
           <Option>-include=PDG2\i_src</Option>
           <Option>-include=PDG2\RIIC</Option>
@@ -100,17 +93,15 @@
           <GenerateMode>BuildOptionChanged</GenerateMode>
         </LibraryGenerateOptions>
         <LinkOrder>
+          <Path>DefaultBuild\clasicc.obj</Path>
           <Path>DefaultBuild\dbsct.obj</Path>
-          <Path>DefaultBuild\IIC_0306_1550.obj</Path>
           <Path>DefaultBuild\resetprg.obj</Path>
           <Path>DefaultBuild\sbrk.obj</Path>
           <Path>DefaultBuild\R_PG_Clock.obj</Path>
           <Path>DefaultBuild\R_PG_I2C_C1.obj</Path>
           <Path>DefaultBuild\Interrupt_INTC.obj</Path>
-          <Path>DefaultBuild\R_PG_SCI_C1.obj</Path>
         </LinkOrder>
         <CommonOptions>
-          <IncludePathForC>PDG2\SCI</IncludePathForC>
           <IncludePathForC>PDG2</IncludePathForC>
           <IncludePathForC>PDG2\i_src</IncludePathForC>
           <IncludePathForC>PDG2\RIIC</IncludePathForC>
