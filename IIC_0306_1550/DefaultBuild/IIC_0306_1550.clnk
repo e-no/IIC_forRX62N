@@ -6,6 +6,7 @@
 -input=DefaultBuild\R_PG_Clock.obj
 -input=DefaultBuild\R_PG_I2C_C1.obj
 -input=DefaultBuild\Interrupt_INTC.obj
+-input=DefaultBuild\R_PG_SCI_C1.obj
 -library=C:\Renesas\PDG2\lib\RX62N\RX62N_library_144_little.lib
 -noprelink
 -output=DefaultBuild\IIC_0306_1550.abs
