@@ -1,11 +1,11 @@
-Renesas Optimizing Linker (W1.01.00 )             11-Mar-2014 12:23:56
+Renesas Optimizing Linker (W1.01.00 )             11-Mar-2014 17:10:08
 
 *** Options ***
 
--subcommand=DefaultBuild\clasicc.clnk
--library=DefaultBuild\clasicc.lib
--input=DefaultBuild\clasicc.obj
+-subcommand=DefaultBuild\IIC_3.11.clnk
+-library=DefaultBuild\IIC_3.11.lib
 -input=DefaultBuild\dbsct.obj
+-input=DefaultBuild\IIC_3.11.obj
 -input=DefaultBuild\resetprg.obj
 -input=DefaultBuild\sbrk.obj
 -input=DefaultBuild\R_PG_Clock.obj
@@ -13,8 +13,8 @@ Renesas Optimizing Linker (W1.01.00 )             11-Mar-2014 12:23:56
 -input=DefaultBuild\Interrupt_INTC.obj
 -library=C:\Renesas\PDG2\lib\RX62N\RX62N_library_144_little.lib
 -noprelink
--output=DefaultBuild\clasicc.abs
--list=DefaultBuild\clasicc.map
+-output=DefaultBuild\IIC_3.11.abs
+-list=DefaultBuild\IIC_3.11.map
 -nooptimize
 -start=B_1,R_1,B_2,R_2,B,R,SU,SI/04,PResetPRG/0FFFF8000,C_1,C_2,C,C$DSEC,C$BSEC,C$INIT,C$VTBL,C$VECT,D_1,D_2,D,P,PIntPRG,W_1,W_2,W,L/0FFFF8100,FIXEDVECT/0FFFFFFD0
 -rom=D=R,D_1=R_1,D_2=R_2
@@ -70,14 +70,14 @@ D_2
 D
                                   ffff89cc  ffff8cbb       2f0   4
 P
-                                  ffff8cbc  ffffcdd1      4116   1
+                                  ffff8cbc  ffffc5d9      391e   1
 W_1
-                                  ffffcdd2  ffffcdd2         0   1
+                                  ffffc5da  ffffc5da         0   1
 W_2
-                                  ffffcdd2  ffffcde5        14   2
+                                  ffffc5da  ffffc5ed        14   2
 W
-                                  ffffcde8  ffffcde8         0   4
+                                  ffffc5f0  ffffc5f0         0   4
 L
-                                  ffffcde8  ffffce34        4d   4
+                                  ffffc5f0  ffffc63c        4d   4
 FIXEDVECT
                                   ffffffd0  ffffffff        30   4

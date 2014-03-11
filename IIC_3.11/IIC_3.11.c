@@ -1,4 +1,3 @@
-
 /***********************************************************************/
 /*                                                                     */
 /*  FILE        :Main.c or Main.cpp                                    */
@@ -37,32 +36,38 @@ void abort(void);
 #define LED_2(X)		(PORT8.DR.BIT.B1 = (X))
 
 //クラコンのデータのありか
-#define MASK_LX         0x3F    // LX<5:0>
-#define MASK_RX34       0xC0    // RX<4:3>
-#define MASK_LY         0x3F    // LY<5:0>
-#define MASK_RY         0x1F    // RY<4:0>
-#define MASK_LT34       0x60    // LT<4:3>
-#define MASK_RT         0x1F    // RT<4:0>
-#define MASK_BDU        0x01    // DU
-#define MASK_RC_DL      0x02    // DL, RC
-#define MASK_BSTART_ZR  0x04    // ZR, START
-#define MASK_BHOME_X    0x08    // X, HOME
-#define MASK_BSELECT_A  0x10    // A, SELECT
-#define MASK_LC_Y       0x20    // LC, Y, LT<0>
-#define MASK_BDD_B      0x40    // B, DD, LT<1>, RX<1>
-#define MASK_BDR_ZL     0x80    // ZL, DR, LT<2>, RX<0>, RX<2>
+#define MASK_LX         		0x3F    // LX<5:0>
+#define MASK_RX34      		0xC0    // RX<4:3>
+#define MASK_LY         		0x3F    // LY<5:0>
+#define MASK_RY         		0x1F    // RY<4:0>
+#define MASK_LT34       		0x60    // LT<4:3>
+#define MASK_RT         		0x1F    // RT<4:0>
+#define MASK_BDU       		0x01    // DU
+#define MASK_RC_DL      		0x02    // DL, RC
+#define MASK_BSTART_ZR  	0x04    // ZR, START
+#define MASK_BHOME_X    	0x08    // X, HOME
+#define MASK_BSELECT_A  	0x10    // A, SELECT
+#define MASK_LC_Y       		0x20    // LC, Y, LT<0>
+#define MASK_BDD_B      		0x40    // B, DD, LT<1>, RX<1>
+#define MASK_BDR_ZL     		0x80    // ZL, DR, LT<2>, RX<0>, RX<2>
 
 
 
 //通信
-#define SLAVE_ADDRESS_W			0xA4
-#define SLAVE_ADDRESS_R			0xA5
-#define SEND_ADDRESS1				0x00
-#define SEND_ADDRESS2				0x40
+#define SLAVE_ADDRESS_W1			0xA4
+#define SLAVE_ADDRESS_R1			0xA5
+
+#define SLAVE_ADDRESS_W2			0x30
+#define SLAVE_ADDRESS_R2			0x31
+
+#define SLAVE_ADDRESS_W3			0x42
+#define SLAVE_ADDRESS_R3			0x43
+
 #define BITRATE	115200
 
+
 //シリアル通信
-#define MODE_SCIDATA_BOX 		19
+#define MODE_SCIDATA_BOX 		3
 #define BLUETOOTH_MODE		OFF
 
 	#if MODE_SCIDATA_BOX != OFF
@@ -208,8 +213,6 @@ char Receive_uart_c(void)
 	return SCI2.RDR;
 }
 
-
-
 /******************************************************************************
 *	タイトル ： Excel処理のためのデータをシリアル送信
 *	  関数名 ： sci_transformer
@@ -323,8 +326,6 @@ void sci_transformer(void)
 	String("\n\r");
 }
 
-
-
 nunchuk_decode_byte (char x)
 {
 	  x = (x ^ 0x17) + 0x17;
@@ -334,136 +335,178 @@ nunchuk_decode_byte (char x)
 void main(void)
 {
 	int cnt = 0;
-	unsigned char cmd_send1[] = {0x40,0x00};
-	unsigned char cmd_send2[] = {0x00};
-	volatile 	int send_f = 0;
-	volatile	int	s_f =0 ;
-	volatile	int 	sci_f = 0;
-	volatile 	int f = 0;
+	
+	volatile 	int 	send_f = 0;
+	volatile	int	s_f 	=0 ;
+	volatile	int 	sci_f 	= 0;
+	volatile 	int 	f 	= 0;
+	
 	unsigned char format = 0;
 		
-	unsigned int LjoyX;
-	unsigned int LjoyY;
-	unsigned int RjoyX;
-	unsigned int RjoyY;
-	unsigned int buttonY;
-	unsigned int buttonX;
-	unsigned int buttonB;
-	unsigned int buttonA;
-	unsigned int buttonLT;
-	unsigned int buttonRT;
-	unsigned int buttonLC;
-	unsigned int buttonRC;
-	unsigned int buttonZL;
-	unsigned int buttonZR;
-	unsigned int buttonSELECT;
-	unsigned int buttonHOME;
-	unsigned int buttonSTART;
-	unsigned int buttonDU;
-	unsigned int buttonDD;
-	unsigned int buttonDL;
-	unsigned int buttonDR;
-
-	char readBuf[] = {0};
+	unsigned int LjoyX = 0;
+	unsigned int LjoyY = 0;
+	unsigned int RjoyX = 0;
+	unsigned int RjoyY = 0;
+	unsigned int buttonY = 0;
+	unsigned int buttonX = 0;
+	unsigned int buttonB = 0;
+	unsigned int buttonA = 0;
+	unsigned int buttonLT = 0;
+	unsigned int buttonRT = 0;
+	unsigned int buttonLC = 0;
+	unsigned int buttonRC = 0;
+	unsigned int buttonZL = 0;
+	unsigned int buttonZR = 0;
+	unsigned int buttonSELECT = 0;
+	unsigned int buttonHOME = 0;
+	unsigned int buttonSTART = 0;
+	unsigned int buttonDU = 0;
+	unsigned int buttonDD = 0;
+	unsigned int buttonDL = 0;
+	unsigned int buttonDR = 0;
+	unsigned int X_kx = 0;
+	unsigned int Y_kx = 0;
+	unsigned int Z_kx = 0;
 	
+	unsigned char cmd_send1[] = {0x40,0x00};
+	unsigned char cmd_send2[] = {0x00};
+	unsigned char cmd_send3[] = {"A"};
+	
+	char readBuf_1[] = {0};
+	char readBuf_2[] = {0};	
+	char readBuf_3[] = {0};
+	
+	R_PG_Clock_Set();
 	Init_Sci();
 	Init_Led();
-	R_PG_Clock_Set();
 	R_PG_I2C_Set_C1();
-
+	
 	while(1){
 		
 		LED_0(ON);
 		
+		if( s_f == 0){
+			
+			R_PG_I2C_MasterSend_C1(
+			format,//スレーブアドレスフォーマット
+			SLAVE_ADDRESS_W3,//スレーブアドレス
+			cmd_send3, //送信データの格納先アドレス
+			2//送信データ数
+			);
+			
+		}else if(s_f == 1){	
+			/*	
+			R_PG_I2C_MasterSend_C1(
+			format,//スレーブアドレスフォーマット
+			SLAVE_ADDRESS_R3,//スレーブアドレス
+			cmd_send2, //送信データの格納先アドレス
+			1//送信データ数
+			);
+			*/
+			LED_1(OFF);
+			LED_2(ON);
+		}else if(s_f == 2){
+			R_PG_I2C_MasterReceive_C1(
+			format,			//スレーブアドレスフォーマット
+			SLAVE_ADDRESS_R3,		//スレーブアドレス
+			readBuf_3,	//受信データの格納先アドレス
+			2//受信データ数
+			);
+			LED_1(ON);
+			LED_2(OFF);
+		}else if(s_f == 3){
+			/*R_PG_I2C_MasterSend_C1(
+			format,//スレーブアドレスフォーマット
+			SLAVE_ADDRESS_W2,//スレーブアドレス
+			cmd_send2, //送信データの格納先アドレス
+			1//送信データ数
+			);
+		}else if(s_f == 4){
+			R_PG_I2C_MasterReceive_C1(
+			format,			//スレーブアドレスフォーマット
+			SLAVE_ADDRESS_R2,		//スレーブアドレス
+			readBuf_2,	//受信データの格納先アドレス
+			6//受信データ数
+			);
+			*/
+		}else{
+		}
 		
-		R_PG_I2C_MasterSend_C1(
-		format,//スレーブアドレスフォーマット
-		SLAVE_ADDRESS_W,//スレーブアドレス
-		cmd_send1, //送信データの格納先アドレス
-		2//送信データ数
-		);
+
+		/*
+		for(cnt = 0;cnt < 6;cnt++){
+			readBuf_1[cnt] = nunchuk_decode_byte(readBuf_1[cnt]) ;
+		}
 		
-		for(f = 0;f < 10000; f++);
+		LjoyX = ((int)readBuf_1[0] & MASK_LX);
+		LjoyY = ((int)readBuf_1[1] & MASK_LY);
+		RjoyX = ((int)(( readBuf_1[ 2 ] & 0x80 ) >> 7 ) | ( ( readBuf_1[ 1 ] & 0xC0 ) >> 5 ) | ( ( readBuf_1[ 0 ] & 0xC0 ) >> 3 ));
+		RjoyY = ((int)readBuf_1[2] & MASK_RY);
+		
+		buttonSTART = ((int)readBuf_1[4] & MASK_BSTART_ZR) >> 2;
+		buttonHOME = ((int)readBuf_1[4] & MASK_BHOME_X) >> 3;
+		buttonSELECT = ((int)readBuf_1[4] & MASK_BSELECT_A)>> 4;
+		
+		buttonDD = ((int)readBuf_1[4] & MASK_BDD_B)>>6;
+		buttonDR = ((int)readBuf_1[4] & MASK_BDR_ZL)>>7;
+		buttonDU = ((int)readBuf_1[5] & MASK_BDU);
+		buttonDL = ((int)readBuf_1[5] & MASK_RC_DL)>>1;
+		
+		buttonX = ((int)readBuf_1[5] & MASK_BHOME_X) >> 3;
+		buttonA = ((int)readBuf_1[5] & MASK_BSELECT_A) >> 4;
+		buttonY = ((int)readBuf_1[5] & MASK_LC_Y) >> 5;
+		buttonB = ((int)readBuf_1[5] & MASK_BDD_B) >> 6;
+		buttonZL = ((int)readBuf_1[5] & MASK_BDR_ZL) >> 7;    
+		buttonZR = ((int)readBuf_1[5] & MASK_BSTART_ZR) >> 2;
+		buttonRT = (int)(readBuf_1[4] & 0x02) >> 1;		
+		buttonLT = (int)(readBuf_1[4] & 0x20 ) >> 5;
+		*/
+		
+		X_kx	= (int)((readBuf_2[0] << 4) + (readBuf_2[1] >> 4));
+		Y_kx 	= (int)((readBuf_2[2] << 4) + (readBuf_2[3] >> 4));
+		Z_kx	= (int)((readBuf_2[4] << 4) + (readBuf_2[5] >> 4));
+		
 	
 		
-		R_PG_I2C_MasterSend_C1(
-		format,//スレーブアドレスフォーマット
-		SLAVE_ADDRESS_W,//スレーブアドレス
-		cmd_send2, //送信データの格納先アドレス
-		1//送信データ数
-		);
-		
-		for(f = 0;f < 10000; f++);
-		
-		R_PG_I2C_MasterReceive_C1(
-		format,			//スレーブアドレスフォーマット
-		SLAVE_ADDRESS_R,		//スレーブアドレス
-		readBuf,	//受信データの格納先アドレス
-		6//受信データ数
-		);
-		
-		for(cnt = 0;cnt < 6;cnt++){
-			readBuf[cnt] = nunchuk_decode_byte(readBuf[cnt]) ;
+		if( (readBuf_3[0] > 0) || (readBuf_3[1] > 0)){
+			//シリアル通信
+			#if MODE_SCIDATA_BOX != OFF
+			//座標データ
+			g_sci1 = (readBuf_3[0] / 10);
+			g_sci2 = (readBuf_3[1] / 10);
+			g_sci3 = Z_kx;
+			/*
+			g_sci4 = 0;
+			g_sci5 = buttonY;
+			g_sci6 = buttonX;
+			g_sci7 = buttonB;
+			g_sci8 = buttonA;
+			g_sci9 = buttonLT;
+			g_sci10 = buttonRT;
+			g_sci11 = buttonZL;
+			g_sci12 = buttonZR;
+			g_sci13 = buttonSELECT;
+			g_sci14 = buttonHOME;
+			g_sci15 = buttonSTART;
+			g_sci16 = buttonDU;
+			g_sci17 = buttonDD;
+			g_sci18 = buttonDL;
+			g_sci19 = buttonDR;
+	                   */                                                                                                               
+			//PCにデータ送信
+			sci_transformer();
+			#endif
 		}
+		s_f++;
 		
-		LED_1(ON);
-		
-		LjoyX = ((int)readBuf[0] & MASK_LX);
-		LjoyY = ((int)readBuf[1] & MASK_LY);
-		RjoyY = ((int)readBuf[2] & MASK_RY);
-		buttonRT = (int)(readBuf[4] & 0x02) >> 1;
-		
-		buttonSTART = ((int)readBuf[4] & MASK_BSTART_ZR) >> 2;
-		buttonHOME = ((int)readBuf[4] & MASK_BHOME_X) >> 3;
-		buttonSELECT = ((int)readBuf[4] & MASK_BSELECT_A)>> 4;
-		
-		buttonDD = ((int)readBuf[4] & MASK_BDD_B)>>6;
-		buttonDR = ((int)readBuf[4] & MASK_BDR_ZL)>>7;
-		buttonDU = ((int)readBuf[5] & MASK_BDU);
-		buttonDL = ((int)readBuf[5] & MASK_RC_DL)>>1;
-		buttonZR = ((int)readBuf[5] & MASK_BSTART_ZR) >> 2;
-		buttonX = ((int)readBuf[5] & MASK_BHOME_X) >> 3;
-		buttonA = ((int)readBuf[5] & MASK_BSELECT_A) >> 4;
-		buttonY = ((int)readBuf[5] & MASK_LC_Y) >> 5;
-		buttonB = ((int)readBuf[5] & MASK_BDD_B) >> 6;
-		buttonZL = ((int)readBuf[5] & MASK_BDR_ZL) >> 7;    
-		buttonLT = (int)(readBuf[4] & 0x20 ) >> 5;
-		 
-		
-		RjoyX = (int)(( ( readBuf[ 2 ] & 0x80 ) >> 7 ) | ( ( readBuf[ 1 ] & 0xC0 ) >> 5 ) | ( ( readBuf[ 0 ] & 0xC0 ) >> 3 ));
-		
-		//シリアル通信
-		#if MODE_SCIDATA_BOX != OFF
-		//座標データ
-		g_sci1 = LjoyX;
-		g_sci2 = LjoyY;
-		g_sci3 = RjoyX;
-		g_sci4 = RjoyY;
-		g_sci5 = buttonA;
-		g_sci6 = buttonB;
-		g_sci7 = buttonX;
-		g_sci8 = buttonY;
-		g_sci9 = buttonLT;
-		g_sci10 = buttonRT;
-		g_sci11 = buttonZL;
-		g_sci12 = buttonZR;
-		g_sci13 = buttonSELECT;
-		g_sci14 = buttonHOME;
-		g_sci15 = buttonSTART;
-		g_sci16 = buttonDU;
-		g_sci17 = buttonDD;
-		g_sci18 = buttonDL;
-		g_sci19 = buttonDR;
-                                                                                                        
-		//PCにデータ送信
-		sci_transformer();
-		#endif
-
-		LED_2(ON);
-					
+		if(s_f < 0){
+			s_f = 0;
+		}else if(s_f > 4){
+			s_f = 0;
+		}
+		for(f = 0;f < 100000; f++);
 		}
 }
-
 
 #ifdef __cplusplus
 void abort(void)
